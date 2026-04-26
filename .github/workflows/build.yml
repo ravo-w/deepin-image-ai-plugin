@@ -12,13 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install linglong-builder
+      - name: Install ll-builder from Linglong CI Repo
         run: |
-          # 添加 deepin 软件源
-          wget -qO- https://packages.deepin.com/deepin/KEY.gpg | sudo gpg --dearmor | sudo tee /usr/share/keyrings/deepin-archive-keyring.gpg
-          echo "deb [signed-by=/usr/share/keyrings/deepin-archive-keyring.gpg] https://packages.deepin.com/deepin beige main" | sudo tee /etc/apt/sources.list.d/deepin.list
+          # 关键步骤：添加并信任玲珑 (Linyaps) 官方为 Ubuntu 提供的 CI 软件源
+          echo "deb [trusted=yes] https://ci.deepin.com/repo/obs/linglong:/CI:/release/xUbuntu_22.04/ ./" | sudo tee /etc/apt/sources.list.d/linglong.list
           sudo apt update
-          sudo apt install -y linglong-builder
+          # 安装完整工具链，确保后续构建无依赖问题
+          sudo apt install -y linglong-builder linglong-box linglong-bin
 
       - name: Build Linglong Package
         run: |
