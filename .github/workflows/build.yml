@@ -1,4 +1,4 @@
-name: Build Linglong Package
+name: Build Linglong Package in Docker
 
 on:
   push:
@@ -7,23 +7,25 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    container:
+      image: deepin-community/ll-builder:latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download and install linglong-builder
-        run: |
-          # 直接从 Deepin 官方软件源下载 linglong-builder 的 .deb 包
-          wget http://packages.deepin.com/deepin/pool/main/l/linglong/linglong-builder_1.4.3-1_amd64.deb
-          sudo dpkg -i linglong-builder_1.4.3-1_amd64.deb
-          # 如果安装过程中提示依赖缺失，尝试自动修复
-          sudo apt-get install -f -y
-
       - name: Build Linglong Package
         run: |
+          # 进入包含 linglong.yaml 的目录（这里是仓库根目录）
+          cd $GITHUB_WORKSPACE
+          # 执行构建命令
           ll-builder build
+          # 导出 .layer 文件
           ll-builder export --layer
+          
+          # 将生成的 .layer 文件移动到根目录，方便上传
+          find . -name "*.layer" -exec mv {} . \;
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
