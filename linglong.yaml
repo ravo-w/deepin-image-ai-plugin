@@ -1,0 +1,25 @@
+version: "1"
+package:
+  id: com.deepin.imageai
+  name: deepin-image-ai-plugin
+  version: 1.0.0.0
+  kind: app
+  description: AI plugin for deepin image viewer
+  architecture: x86_64
+
+command:
+  - python3
+  - /opt/apps/com.deepin.imageai/files/bin/main.py
+
+base: org.deepin.base/23.1.0
+runtime: org.deepin.runtime.dtk/23.1.0
+
+sources:
+  - kind: git
+    url: https://github.com/ravo-w/deepin-image-ai-plugin.git
+    commit: main
+
+build: |
+  pip3 install --user -r requirements.txt
+  mkdir -p /app/bin
+  cp main.py /app/bin/
