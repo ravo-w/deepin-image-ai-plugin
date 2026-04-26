@@ -14,8 +14,8 @@ jobs:
 
       - name: Install Linglong Builder
         run: |
-          # 添加 Deepin 官方仓库
-          wget -qO- https://packages.deepin.com/deepin/KEY.gpg | sudo gpg --dearmor | sudo tee /usr/share/keyrings/deepin-archive-keyring.gpg
+          # 正确的 Deepin 仓库地址
+          sudo wget -qO- https://packages.deepin.com/deepin/KEY.gpg | sudo gpg --dearmor | sudo tee /usr/share/keyrings/deepin-archive-keyring.gpg
           echo "deb [signed-by=/usr/share/keyrings/deepin-archive-keyring.gpg] https://packages.deepin.com/deepin beige main" | sudo tee /etc/apt/sources.list.d/deepin.list
           sudo apt update
           sudo apt install -y linglong-builder
