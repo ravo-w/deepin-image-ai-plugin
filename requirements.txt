@@ -1,0 +1,5 @@
+rembg
+Pillow
+opencv-python
+PyQt5
+dbus-python
