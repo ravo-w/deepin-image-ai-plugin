@@ -8,15 +8,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    container:
-      image: deepin-community/linglong-builder:latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Install Linglong Builder
+        run: |
+          # 添加 Deepin 官方仓库
+          wget -qO- https://packages.deepin.com/deepin/KEY.gpg | sudo gpg --dearmor | sudo tee /usr/share/keyrings/deepin-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/deepin-archive-keyring.gpg] https://packages.deepin.com/deepin beige main" | sudo tee /etc/apt/sources.list.d/deepin.list
+          sudo apt update
+          sudo apt install -y linglong-builder
+
       - name: Build Linglong Package
         run: |
           ll-builder build
           ll-builder export --layer
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
