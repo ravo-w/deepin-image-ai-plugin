@@ -1,0 +1,13 @@
+Source: deepin-image-ai-plugin
+Section: python
+Priority: optional
+Maintainer: Your Name <your-email@example.com>
+Build-Depends: debhelper-compat (= 13), dh-python, python3-all
+Standards-Version: 4.5.1
+Homepage: https://github.com/ravo-w/deepin-image-ai-plugin
+
+Package: deepin-image-ai-plugin
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends}, python3-rembg, python3-pil, python3-opencv, python3-pyqt5, python3-dbus
+Description: AI plugin for deepin image viewer
+ AI functions: remove background, enhance image, change background.
