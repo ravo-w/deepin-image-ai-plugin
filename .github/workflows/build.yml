@@ -12,11 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Linglong Builder
+      - name: Install Linglong Builder (using Aliyun mirror)
         run: |
-          # 正确的 Deepin 仓库地址
-          sudo wget -qO- https://packages.deepin.com/deepin/KEY.gpg | sudo gpg --dearmor | sudo tee /usr/share/keyrings/deepin-archive-keyring.gpg
-          echo "deb [signed-by=/usr/share/keyrings/deepin-archive-keyring.gpg] https://packages.deepin.com/deepin beige main" | sudo tee /etc/apt/sources.list.d/deepin.list
+          # 使用阿里云镜像源，解决 NOSPLIT 网络问题
+          echo "deb [trusted=yes] http://mirrors.aliyun.com/deepin/ beige main" | sudo tee /etc/apt/sources.list.d/deepin.list
           sudo apt update
           sudo apt install -y linglong-builder
 
@@ -24,6 +23,9 @@ jobs:
         run: |
           ll-builder build
           ll-builder export --layer
+          
+          # 将生成的 .layer 文件移动到根目录，方便上传
+          find . -name "*.layer" -exec mv {} . \;
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
